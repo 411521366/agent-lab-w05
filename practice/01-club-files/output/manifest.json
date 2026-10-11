@@ -1,0 +1,62 @@
+[
+  {
+    "source": "announcement.txt",
+    "destination": "announcements/announcement.txt",
+    "reason": "活動通知公告文字，與 announcement_copy.txt 內容完全相同（已保留副本）。"
+  },
+  {
+    "source": "announcement_copy.txt",
+    "destination": "announcements/announcement_copy.txt",
+    "reason": "活動通知公告副本，與 announcement.txt 內容完全相同（依要求保留副本，不刪除）。"
+  },
+  {
+    "source": "poster_text.txt",
+    "destination": "announcements/poster_text.txt",
+    "reason": "文宣海報宣傳文字，歸類於文宣公告類別。"
+  },
+  {
+    "source": "proposal_final.txt",
+    "destination": "proposals/proposal_final.txt",
+    "reason": "戶外活動30分鐘企畫第一版；雖檔名為final但內容載明尚未定案，與final2內容不同，皆完整保留。"
+  },
+  {
+    "source": "proposal_final2.txt",
+    "destination": "proposals/proposal_final2.txt",
+    "reason": "室內活動20分鐘企畫第二版；內容標記仍待討論，與proposal_final內容互異，皆完整保留不覆蓋。"
+  },
+  {
+    "source": "rain_plan.txt",
+    "destination": "proposals/rain_plan.txt",
+    "reason": "雨天備案企畫討論方案，歸類於活動企畫與備案。"
+  },
+  {
+    "source": "meeting_notes.txt",
+    "destination": "meetings/meeting_notes.txt",
+    "reason": "社團會議記錄摘要，討論室內或室外方案。"
+  },
+  {
+    "source": "next_steps.txt",
+    "destination": "meetings/next_steps.txt",
+    "reason": "後續待辦與工作清單，指出比較兩個企畫且均未定案。"
+  },
+  {
+    "source": "budget_draft.txt",
+    "destination": "budget/budget_draft.txt",
+    "reason": "紙張預算草案（模擬值100，尚未核定），歸類於預算財務類別。"
+  },
+  {
+    "source": "equipment_list.txt",
+    "destination": "equipment/equipment_list.txt",
+    "reason": "器材清單（彩色筆4、紙2包），與 equipment_backup.txt 內容完全相同（保留副本）。"
+  },
+  {
+    "source": "equipment_backup.txt",
+    "destination": "equipment/equipment_backup.txt",
+    "reason": "器材備份清單，與 equipment_list.txt 內容完全相同（依要求保留副本，不刪除）。"
+  },
+  {
+    "source": "feedback_questions.txt",
+    "destination": "feedback/feedback_questions.txt",
+    "reason": "活動回饋問卷問題，歸類於活動檢討與回饋。"
+  }
+]
