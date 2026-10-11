@@ -176,6 +176,27 @@
       background-color: var(--secondary-hover);
     }
 
+    .match-count-badge {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .match-count-num {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.97); opacity: 0.6; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .result-section {
       min-height: 120px;
       display: flex;
@@ -195,6 +216,7 @@
       border: 2px solid #86efac;
       align-items: stretch;
       text-align: left;
+      animation: popIn 0.25s ease-out;
     }
 
     .result-section.no-result {
@@ -333,7 +355,7 @@
       <div class="form-grid">
         <div class="form-group">
           <label for="filter-location" id="label-loc">地點類型</label>
-          <select id="filter-location">
+          <select id="filter-location" onchange="updateMatchCount()">
             <option value="all">不限</option>
             <option value="indoor">室內</option>
             <option value="outdoor">室外</option>
@@ -342,7 +364,7 @@
 
         <div class="form-group">
           <label for="filter-time" id="label-time">可用時間</label>
-          <select id="filter-time">
+          <select id="filter-time" onchange="updateMatchCount()">
             <option value="15">15 分鐘</option>
             <option value="30" selected>30 分鐘</option>
             <option value="60">60 分鐘</option>
@@ -351,7 +373,7 @@
 
         <div class="form-group">
           <label for="filter-energy" id="label-energy">活動強度</label>
-          <select id="filter-energy">
+          <select id="filter-energy" onchange="updateMatchCount()">
             <option value="all">不限</option>
             <option value="low">低強度</option>
             <option value="medium">中強度</option>
@@ -359,8 +381,12 @@
         </div>
       </div>
 
+      <div class="match-count-badge" id="match-count-badge">
+        <span id="match-count-prefix">符合條件活動數：</span><span class="match-count-num" id="match-count-num">8</span><span id="match-count-suffix"> 個</span>
+      </div>
+
       <div class="actions">
-        <button id="btn-pick" class="btn btn-primary" onclick="pickActivity()">幫我選</button>
+        <button id="btn-pick" class="btn btn-primary" onclick="pickActivity()">幫我選 (Enter ⏎)</button>
         <button id="btn-reset" class="btn btn-secondary" onclick="resetFilters()">重設篩選</button>
       </div>
 
@@ -500,8 +526,10 @@
         energyAll: "不限",
         energyLow: "低強度",
         energyMedium: "中強度",
-        btnPick: "幫我選",
+        btnPick: "幫我選 (Enter ⏎)",
         btnReset: "重設篩選",
+        matchCountPrefix: "符合條件活動數：",
+        matchCountSuffix: " 個",
         placeholder: "請設定條件後點擊「幫我選」",
         noMatch: "沒有符合條件的活動",
         historyTitle: "最近抽選紀錄（最多5筆）",
@@ -530,8 +558,10 @@
         energyAll: "All",
         energyLow: "Low",
         energyMedium: "Medium",
-        btnPick: "Pick for me",
+        btnPick: "Pick for me (Enter ⏎)",
         btnReset: "Reset filters",
+        matchCountPrefix: "Matching activities: ",
+        matchCountSuffix: "",
         placeholder: "Configure filters and click 'Pick for me'",
         noMatch: "No matching activities found",
         historyTitle: "Recent picks (latest 5)",
@@ -583,6 +613,10 @@
       document.getElementById('btn-reset').textContent = t.btnReset;
       document.getElementById('ui-history-title').textContent = t.historyTitle;
       document.getElementById('btn-clear-history').textContent = t.btnClear;
+
+      document.getElementById('match-count-prefix').textContent = t.matchCountPrefix;
+      document.getElementById('match-count-suffix').textContent = t.matchCountSuffix;
+      updateMatchCount();
 
       renderCurrentResult();
       renderHistory();
@@ -684,10 +718,26 @@
       });
     }
 
+    function updateMatchCount() {
+      const loc = document.getElementById('filter-location').value;
+      const maxMins = parseInt(document.getElementById('filter-time').value, 10);
+      const energy = document.getElementById('filter-energy').value;
+
+      const matched = activities.filter(a => {
+        const matchLoc = (loc === 'all' || a.location_type === loc);
+        const matchTime = (a.minutes <= maxMins);
+        const matchEnergy = (energy === 'all' || a.energy === energy);
+        return matchLoc && matchTime && matchEnergy;
+      });
+
+      document.getElementById('match-count-num').textContent = matched.length;
+    }
+
     function resetFilters() {
       document.getElementById('filter-location').value = 'all';
       document.getElementById('filter-time').value = '30';
       document.getElementById('filter-energy').value = 'all';
+      updateMatchCount();
       // Do not clear history!
     }
 
@@ -695,6 +745,20 @@
       historyList = [];
       renderHistory();
     }
+
+    // Keyboard shortcut: Press Enter to pick activity
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        if (activeTag !== 'button') {
+          e.preventDefault();
+          pickActivity();
+        }
+      }
+    });
+
+    // Initialize match count on load
+    updateMatchCount();
   </script>
 </body>
 </html>
